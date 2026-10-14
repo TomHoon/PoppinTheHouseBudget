@@ -95,3 +95,22 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+## Android 알림 수신 테스트
+
+디버그 앱을 실행한 뒤 **알림 접근 권한 설정 열기**를 누르고
+CardNotificationApp의 알림 접근을 허용합니다. 다른 앱에서 새 알림을
+발생시킨 뒤 Android Studio Logcat에서 `tag:CardNotification`으로 필터링합니다.
+
+```text
+Notification listener connected
+packageName=com.example.app / title=알림 제목 / text=알림 본문
+```
+
+터미널에서는 `adb logcat -s CardNotification:I "*:S"`로 확인할 수 있습니다.
+연결된 에뮬레이터에서 수신 경로를 확인하려면 권한 허용 및 서비스 연결 후
+`adb shell cmd notification post -t NotificationTest card-test NotificationListenerTestBody`
+명령으로 테스트 알림을 생성합니다. 이 알림의 패키지명은 `com.android.shell`입니다.
+실제 다른 앱의 푸시 알림도 별도로 발생시켜 확인합니다.
+
+알림 내용은 디버그 빌드에서만 기록합니다. 금액이 포함된 알림은 금액을 `text`, 나머지 내용을 `title`로 분리해 Apps Script에 POST 전송합니다.
